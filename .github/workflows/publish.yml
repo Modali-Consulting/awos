@@ -21,7 +21,10 @@ permissions:
 
 jobs:
   publish:
-    runs-on: ubuntu-latest
+    # Publishing belongs to the upstream package (provectus/awos). npm Trusted Publishing (OIDC, --provenance) works
+    # only on GitHub-hosted runners, and this fork runs no hosted runners; the fork does not publish.
+    if: github.repository == 'provectus/awos'
+    runs-on: ${{ vars.LINUX_RUNNER || 'beast' }}
     steps:
       - uses: actions/checkout@v6
 

@@ -8,7 +8,7 @@ permissions: {}
 
 jobs:
   prettier:
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.LINUX_RUNNER || 'beast' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -25,7 +25,7 @@ jobs:
   # Flip `continue-on-error: false` to make this a required gate once it has
   # been green on two consecutive PRs (see plan PR 4).
   test:
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.LINUX_RUNNER || 'beast' }}
     continue-on-error: true
     steps:
       - name: Checkout code
@@ -45,7 +45,7 @@ jobs:
   # while teams ratchet up the numbers.
   coverage-report:
     needs: test
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.LINUX_RUNNER || 'beast' }}
     continue-on-error: true
     steps:
       - name: Checkout code
@@ -63,7 +63,7 @@ jobs:
   # thresholds hardcoded below. To raise the floor, edit this block.
   coverage-gate:
     needs: test
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.LINUX_RUNNER || 'beast' }}
     continue-on-error: true
     env:
       COVERAGE_LINES: '90'
