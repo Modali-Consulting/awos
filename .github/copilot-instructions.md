@@ -5,11 +5,13 @@
 **Rationale:** The AWOS package installation process copies files and creates directories in the user's project workspace. This installation is intended for end users adopting the AWOS framework in their own projects, not for contributors working on the AWOS framework itself.
 
 **When to avoid installation:**
+
 - During any codebase contributions to this repository
 - When reviewing or testing changes to the AWOS framework
 - When debugging or fixing issues in the framework code
 
 **When installation is appropriate:**
+
 - Only when an end user wants to adopt AWOS in their own separate project
 - Only when explicitly requested by a user for their own project setup
 
@@ -22,11 +24,13 @@ This is a framework for spec-driven development using AI agents. It provides str
 ## Architecture Overview
 
 **Core Components:**
+
 - **Installer (`index.js`)**: NPM package that copies workflow templates and commands to user projects
 - **Commands (`/commands/*.md`)**: AI agent prompts that guide users through development stages
 - **Templates (`/templates/*.md`)**: Structured document templates for specifications and planning
 
 **Installation Flow:**
+
 ```
 npx @provectusinc/awos
 ├── Creates `.claude/commands/awos/` (copies all commands/*.md files)
@@ -39,6 +43,7 @@ npx @provectusinc/awos
 AWOS uses a **document-centric approach** where all project state lives in structured markdown files, making the system **idempotent**. AI agents can restore full context from files alone, regardless of chat history.
 
 **Key Document Types:**
+
 - `context/product/product-definition.md` - Business vision and requirements
 - `context/roadmap/roadmap.md` - Feature prioritization and planning
 - `context/architecture/architecture.md` - Technical blueprint and decisions
@@ -49,12 +54,14 @@ AWOS uses a **document-centric approach** where all project state lives in struc
 ## Command Workflow Pattern
 
 Each command follows a consistent structure:
+
 1. **ROLE** - Defines the AI agent's persona and expertise
 2. **TASK** - Specific responsibility and outputs
 3. **INPUTS/OUTPUTS** - Expected files and data flow
 4. **PROCESS** - Step-by-step execution logic
 
 **Sequential Workflow:**
+
 ```
 /awos:product → /awos:roadmap → /awos:architecture →
 /awos:spec → /awos:tech → /awos:tasks → /awos:implement
@@ -63,6 +70,7 @@ Each command follows a consistent structure:
 ## Agent Delegation Pattern
 
 The `/awos:implement` command acts as an **engineering manager** that:
+
 - Reads task lists from `context/spec/[feature]/tasks.md`
 - Loads full context from functional specs and technical considerations
 - **Delegates** actual coding to specialized subagents (never writes code itself)
@@ -73,17 +81,20 @@ The `/awos:implement` command acts as an **engineering manager** that:
 ## Development Conventions
 
 **File Structure:**
+
 - All AWOS workflow files use `.md` format for AI readability
 - Commands are executable prompts stored as markdown files
 - Templates contain placeholder sections marked with `[brackets]`
 - Each spec gets its own directory under `context/spec/`
 
 **Template Population:**
+
 - Commands guide users through interactive sessions to populate templates
 - Support both "Creation Mode" (new documents) and "Update Mode" (existing documents)
 - Generate a single output document per command
 
 **Task Granularity:**
+
 - Each task in `tasks.md` must be **runnable and testable**
 - Application should remain functional after each completed task
 - Tasks are atomic units that produce intermediate, visible results
